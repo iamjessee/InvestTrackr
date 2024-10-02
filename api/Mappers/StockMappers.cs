@@ -14,7 +14,7 @@ namespace api.Mappers
             return new StockDto
             {
                 Id = stockModel.Id,
-                Sybmol = stockModel.Sybmol,
+                Symbol = stockModel.Symbol,
                 CompanyName = stockModel.CompanyName,
                 Purchase = stockModel.Purchase,
                 LastDiv = stockModel.LastDiv,
@@ -28,7 +28,7 @@ namespace api.Mappers
         {
             return new Stock
             {
-                Sybmol = stockDto.Sybmol,
+                Symbol = stockDto.Sybmol,
                 CompanyName = stockDto.CompanyName,
                 Purchase = stockDto.Purchase,
                 LastDiv = stockDto.LastDiv,

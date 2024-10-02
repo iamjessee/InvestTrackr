@@ -54,9 +54,16 @@ namespace api.Repository
 
             if(!string.IsNullOrWhiteSpace(query.Symbol))
             {
-                stocks = stocks.Where(s => s.Sybmol.Contains(query.Symbol));
+                stocks = stocks.Where(s => s.Symbol.Contains(query.Symbol));
             }
 
+            if(!string.IsNullOrWhiteSpace(query.SortBy))
+            {
+                if(query.SortBy.Equals("Symbol", StringComparison.OrdinalIgnoreCase))
+                {
+                    stocks = query.IsDecsending ? stocks.OrderByDescending(s => s.Symbol) : stocks.OrderBy(s => s.Symbol);
+                }
+            }
             return await stocks.ToListAsync();
         }
 
@@ -79,7 +86,7 @@ namespace api.Repository
                 return null;
             }
 
-            existingStock.Sybmol = stockDto.Sybmol;
+            existingStock.Symbol = stockDto.Sybmol;
             existingStock.CompanyName = stockDto.CompanyName;
             existingStock.Purchase = stockDto.Purchase;
             existingStock.LastDiv = stockDto.LastDiv;
