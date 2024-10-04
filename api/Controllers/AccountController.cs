@@ -10,53 +10,50 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace api.Controllers
 {
-    [Route("api/acccount")]
+    [Route("api/account")]
     [ApiController]
     public class AccountController : ControllerBase
     {
         private readonly UserManager<AppUser> _userManager;
+
         public AccountController(UserManager<AppUser> userManager)
         {
-            _userManager = userManager;
+            _userManager = userManager; 
         }
 
+        // Registers a new user
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
         {
-            try {
-
-                if(!ModelState.IsValid)
+            try
+            {
+                if (!ModelState.IsValid) 
                 {
-                    return BadRequest(ModelState);
+                    return BadRequest(ModelState); // Return validation errors
                 }
-                var appUser = new AppUser
+
+                var appUser = new AppUser 
                 {
                     UserName = registerDto.Username,
                     Email = registerDto.Email
                 };
 
+                // Create the user and check if the creation succeeded
                 var createdUser = await _userManager.CreateAsync(appUser, registerDto.Password);
 
-                if(createdUser.Succeeded)
+                if (createdUser.Succeeded)
                 {
+                    // Add user to the "User" role
                     var roleResult = await _userManager.AddToRoleAsync(appUser, "User");
-                    if(roleResult.Succeeded)
-                    {
-                        return Ok("User Created");
-                    }
-                    else
-                    {
-                        return BadRequest(roleResult.Errors);
-                    }
+                    return roleResult.Succeeded ? Ok("User Created") : BadRequest(roleResult.Errors);
                 }
-                else
-                {
-                    return StatusCode(StatusCodes.Status500InternalServerError, createdUser.Errors);
-                }
-
-            } catch(Exception ex )
+                
+                // Handle user creation failure
+                return StatusCode(StatusCodes.Status500InternalServerError, createdUser.Errors); 
+            }
+            catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex); // Handle unexpected errors
             }
         }
     }
