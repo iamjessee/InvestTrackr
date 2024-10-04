@@ -1,16 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using api.Dtos;
 using api.Interfaces;
 using api.Mappers;
 using api.Repository;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualBasic;
 
 namespace api.Controllers
 {
+    // Defines the route for comment-related API calls
     [Route("api/comment")]
     [ApiController]
     public class CommentController : ControllerBase
@@ -18,12 +14,14 @@ namespace api.Controllers
         private readonly ICommentRepository _commentRepository;
         private readonly IStockRepository _stockRepository;
 
+        // Constructor to inject the repositories
         public CommentController(ICommentRepository commentRepository, IStockRepository stockRepository)
         {
             _commentRepository = commentRepository;
             _stockRepository = stockRepository;
         }
 
+        // Retrieves all comments from the repository
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -33,12 +31,12 @@ namespace api.Controllers
             }
 
             var comments = await _commentRepository.GetAllAsync();
-
             var commentDto = comments.Select(c => c.ToCommentDto());
 
             return Ok(commentDto);
         }
 
+        // Retrieves a specific comment by ID
         [HttpGet]
         [Route("{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
@@ -55,10 +53,10 @@ namespace api.Controllers
                 return NotFound();
             }
 
-            return
-            Ok(comment.ToCommentDto());
+            return Ok(comment.ToCommentDto());
         }
 
+        // Creates a new comment associated with a specific stock
         [HttpPost]
         [Route("{stockId:int}")]
         public async Task<IActionResult> Create([FromRoute] int stockId, CreateCommentDto commentDto)
@@ -78,6 +76,7 @@ namespace api.Controllers
             return CreatedAtAction(nameof(GetById), new { id = commentModel.Id }, commentModel.ToCommentDto());
         }
 
+        // Updates an existing comment by ID
         [HttpPut]
         [Route("{id:int}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateCommentRequestDto updateDto)
@@ -97,6 +96,7 @@ namespace api.Controllers
             return Ok(comment.ToCommentDto());
         }
 
+        // Deletes a comment by ID
         [HttpDelete]
         [Route("{id:int}")]
         public async Task<IActionResult> Delete([FromRoute] int id)

@@ -1,14 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using api.Data;
 using api.Dtos;
 using api.Helpers;
 using api.Interfaces;
 using api.Mappers;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace api.Controllers
 {
@@ -23,24 +17,25 @@ namespace api.Controllers
             _stockRepository = stockRepository;
         }
 
+        // Retrieves all stocks based on a query object (filtering, sorting, pagination).
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] QueryObject query)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(ModelState); // Invalid model data
             }
 
+            // Fetch stocks and convert them to DTOs for response
             var stocks = await _stockRepository.GetAllAsync(query);
-            
             var stockDto = stocks.Select(s => s.ToStockDto());
 
             return Ok(stockDto);
         }
 
-        [HttpGet]
-        [Route("{id:int}")]
-        public async Task<IActionResult> GetbyId([FromRoute] int id)
+        // Retrieves a specific stock by ID
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetById([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
@@ -51,12 +46,13 @@ namespace api.Controllers
 
             if (stock == null)
             {
-            return NotFound();
+                return NotFound();
             }
 
             return Ok(stock.ToStockDto());
         }
 
+        // Creates a new stock
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateStockRequestDto stockDto)
         {
@@ -67,11 +63,13 @@ namespace api.Controllers
 
             var stockModel = stockDto.ToStockFromCreateDTO();
             await _stockRepository.CreateAsync(stockModel);
-            return CreatedAtAction(nameof(GetbyId), new {id = stockModel.Id}, stockModel.ToStockDto());
+
+            // Return 201 Created with the location of the newly created stock
+            return CreatedAtAction(nameof(GetById), new { id = stockModel.Id }, stockModel.ToStockDto());
         }
 
-        [HttpPut]
-        [Route("{id:int}")]
+        // Updates an existing stock by ID
+        [HttpPut("{id:int}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateStockRequestDto updateDto)
         {
             if (!ModelState.IsValid)
@@ -81,7 +79,7 @@ namespace api.Controllers
 
             var stockModel = await _stockRepository.UpdateAsync(id, updateDto);
 
-            if(stockModel == null)
+            if (stockModel == null)
             {
                 return NotFound();
             }
@@ -89,8 +87,8 @@ namespace api.Controllers
             return Ok(stockModel.ToStockDto());
         }
 
-        [HttpDelete]
-        [Route("{id:int}")]
+        // Deletes a stock by ID
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             if (!ModelState.IsValid)
