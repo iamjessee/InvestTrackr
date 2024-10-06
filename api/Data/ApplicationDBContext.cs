@@ -19,6 +19,7 @@ namespace api.Data
         {
             base.OnModelCreating(builder);
 
+            // Predefined roles: Admin and User
             List<IdentityRole> roles = new()
             {
                 new IdentityRole
@@ -32,6 +33,8 @@ namespace api.Data
                     NormalizedName = "USER"
                 },
             };
+
+            // Seed roles into the database
             builder.Entity<IdentityRole>().HasData(roles);
         }
     }
