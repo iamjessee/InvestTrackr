@@ -86,10 +86,12 @@ builder.Services.AddAuthentication(options =>
 });
 
 // Register repositories and services
-builder.Services.AddScoped<IStockRepository, StockRepository>();
-builder.Services.AddScoped<ICommentRepository, CommentRepository>();
-builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IPortfolioRepository, PortfolioRepository>();
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+builder.Services.AddScoped<IStockRepository, StockRepository>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddHttpClient<IFMPService,FMPService>();
+builder.Services.AddScoped<IFMPService, FMPService>();
 
 var app = builder.Build();
 
