@@ -1,6 +1,8 @@
 using api.Data;
+using api.Helpers;
 using api.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 
 
 namespace api.Repository
@@ -39,9 +41,21 @@ namespace api.Repository
         }
 
         // Retrieves all comments from the database
-        public async Task<List<Comment>> GetAllAsync()
+        public async Task<List<Comment>> GetAllAsync(CommentQueryObject queryObject)
         {
-            return await _context.Comments.Include(a => a.AppUser).ToListAsync();
+            var comments = _context.Comments.Include(a => a.AppUser).AsQueryable();
+
+            if(!string.IsNullOrWhiteSpace(queryObject.Symbol))
+            {
+                comments = comments.Where(s => s.Stock.Symbol == queryObject.Symbol);
+            }
+
+            if(queryObject.IsDecending == true)
+            {
+                comments = comments.OrderByDescending(c => c.CreatedOn);
+            }
+
+            return await comments.ToListAsync();
 
         }
 
