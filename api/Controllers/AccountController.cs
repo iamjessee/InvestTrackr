@@ -66,7 +66,7 @@ namespace api.Controllers
         {
             try
             {
-                if (!ModelState.IsValid) 
+                if (!ModelState.IsValid)
                 {
                     return BadRequest(ModelState); // Return validation errors
                 }
@@ -102,7 +102,7 @@ namespace api.Controllers
                 }
                 
                 // Handle user creation failure
-                return StatusCode(StatusCodes.Status500InternalServerError, createdUser.Errors); 
+                return StatusCode(StatusCodes.Status500InternalServerError, createdUser.Errors);
             }
             catch (Exception ex)
             {

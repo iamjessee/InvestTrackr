@@ -61,8 +61,6 @@ namespace api.Controllers
                 }
             }
 
-            //if (stock == null) return BadRequest("Stock not found");
-
             var userPortfolio = await _portfolioRepository.GetUserPortoflio(appUser);
 
             if(userPortfolio.Any(e => e.Symbol.ToLower() == symbol.ToLower()))
