@@ -29,6 +29,7 @@ namespace api.Controllers
             _fmpService = fmpService;
         }
 
+        // Get porfolio of authorized user
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> GetUserPortfolio()
@@ -40,6 +41,7 @@ namespace api.Controllers
             return Ok(userPortfolio);
         }
 
+        //Add stock to authorized user's portfolio
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> AddPortfolio(string symbol)
@@ -57,7 +59,7 @@ namespace api.Controllers
                 }
                 else
                 {
-                    await _stockRepository.CreateAsync(stock);
+                    await _stockRepository.CreateAsync(stock); // add stocks if found through service
                 }
             }
 
@@ -86,6 +88,7 @@ namespace api.Controllers
             }
         }
 
+            // Delete stock from user's portfolio
             [HttpDelete]
             [Authorize]
             public async Task<IActionResult> DeletePortfolio(string symbol)

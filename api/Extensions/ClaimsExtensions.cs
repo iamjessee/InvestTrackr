@@ -8,6 +8,7 @@ namespace api.Extensions
 {
     public static class ClaimsExtensions
     {
+        // Retrieves the user's given name (username) from the claims
         public static string GetUsername(this ClaimsPrincipal user)
         {
             return user.Claims.SingleOrDefault(x => x.Type.Equals("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname")).Value;

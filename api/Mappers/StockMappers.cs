@@ -36,6 +36,7 @@ namespace api.Mappers
             };
         }
 
+        // Converts FMPStock data to a Stock model
         public static Stock ToStockFromFMPStock(this FMPStock fmpStock)
         {
             return new Stock
@@ -43,7 +44,7 @@ namespace api.Mappers
                 Symbol = fmpStock.symbol,
                 CompanyName = fmpStock.companyName,
                 Purchase = (decimal)fmpStock.price,
-                LastDiv = (decimal)fmpStock.lastDiv,
+                LastDiv = fmpStock.lastDiv,
                 Industry = fmpStock.industry,
                 MarketCap = fmpStock.mktCap
             };

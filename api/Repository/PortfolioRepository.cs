@@ -18,6 +18,7 @@ namespace api.Repository
             _context = context;
         }
 
+        // Adds new portfolio to the database
         public async Task<Portfolios> CreateAsync(Portfolios portfolio)
         {
             await _context.Portfolios.AddAsync(portfolio);
@@ -25,13 +26,14 @@ namespace api.Repository
             return portfolio;
         }
 
+        // Deletes portfolio entry based on authorized user and stock symbol
         public async Task<Portfolios> DeletePortfolioAsync(AppUser appUser, string symbol)
         {
             var portfolioModel = await _context.Portfolios.FirstOrDefaultAsync(x => x.AppUserId == appUser.Id && x.Stock.Symbol.ToLower() == symbol.ToLower());
 
             if(portfolioModel == null)
             {
-                return null;
+                return null; // Return null if portfolio entry is not found
             }
 
             _context.Portfolios.Remove(portfolioModel);
@@ -40,6 +42,7 @@ namespace api.Repository
             return portfolioModel;
         }
 
+        // Retrives portfolio based on authorized user
         public async Task<List<Stock>> GetUserPortoflio(AppUser appUser)
         {
             return await _context.Portfolios.Where(u => u.AppUserId == appUser.Id)

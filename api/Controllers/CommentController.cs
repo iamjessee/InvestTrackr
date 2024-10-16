@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
 {
-    // Defines the route for comment-related API calls
     [Route("api/comment")]
     [ApiController]
     public class CommentController : ControllerBase
@@ -21,7 +20,6 @@ namespace api.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly IFMPService _fmpService;
 
-        // Constructor to inject the repositories
         public CommentController(ICommentRepository commentRepository, IStockRepository stockRepository, UserManager<AppUser> userManager,
         IFMPService fmpService)
         {
@@ -31,7 +29,7 @@ namespace api.Controllers
             _fmpService = fmpService;
         }
 
-        // Retrieves all comments from the repository
+        // Retrieves all comments based on query parameters
         [HttpGet]
         public async Task<IActionResult> GetAll( [FromQuery] CommentQueryObject queryObject)
         {
@@ -46,7 +44,7 @@ namespace api.Controllers
             return Ok(commentDto);
         }
 
-        // Retrieves a specific comment by ID
+        // Retrieves a comment by ID
         [HttpGet]
         [Route("{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
@@ -66,7 +64,7 @@ namespace api.Controllers
             return Ok(comment.ToCommentDto());
         }
 
-        // Creates a new comment associated with a specific stock
+        // Creates a new comment for a stock
         [HttpPost]
         [Route("{symbol:alpha}")]
         public async Task<IActionResult> Create([FromRoute] string symbol, CreateCommentDto commentDto)
