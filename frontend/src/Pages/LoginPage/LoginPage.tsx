@@ -24,8 +24,8 @@ const LoginPage = (props: Props) => {
     formState: { errors },
   } = useForm<LoginFormsInputs>({ resolver: yupResolver(validation) });
 
-  const handleLogin = (form: LoginFormsInputs) => {
-    loginUser(form.userName, form.password);
+  const handleLogin = async (form: LoginFormsInputs) => {
+    await loginUser(form.userName, form.password);
   };
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
@@ -41,7 +41,7 @@ const LoginPage = (props: Props) => {
             >
               <div>
                 <label
-                  htmlFor="email"
+                  htmlFor="username"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
                   Username
@@ -53,10 +53,8 @@ const LoginPage = (props: Props) => {
                   placeholder="Username"
                   {...register("userName")}
                 />
-                {errors.userName ? (
-                  <p className="text-white">{errors.userName.message}</p>
-                ) : (
-                  ""
+                {errors.userName && (
+                  <p className="text-red-500">{errors.userName.message}</p>
                 )}
               </div>
               <div>
@@ -73,19 +71,9 @@ const LoginPage = (props: Props) => {
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   {...register("password")}
                 />
-                {errors.password ? (
-                  <p className="text-white">{errors.password.message}</p>
-                ) : (
-                  ""
+                {errors.password && (
+                  <p className="text-red-500">{errors.password.message}</p>
                 )}
-              </div>
-              <div className="flex items-center justify-between">
-                <a
-                  href="#"
-                  className="text-sm text-white font-medium text-primary-600 hover:underline dark:text-primary-500"
-                >
-                  Forgot password?
-                </a>
               </div>
               <button
                 type="submit"
@@ -93,15 +81,6 @@ const LoginPage = (props: Props) => {
               >
                 Sign in
               </button>
-              <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                Don’t have an account yet?{" "}
-                <a
-                  href="#"
-                  className="font-medium text-primary-600 hover:underline dark:text-primary-500"
-                >
-                  Sign up
-                </a>
-              </p>
             </form>
           </div>
         </div>

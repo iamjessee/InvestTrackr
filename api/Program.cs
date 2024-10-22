@@ -105,9 +105,10 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseCors(x => x 
-.AllowAnyMethod()
+.WithOrigins("http://localhost:3000")
 .AllowAnyMethod()
 .AllowCredentials()
+.WithHeaders("Content-Type", "Authorization")
 .SetIsOriginAllowed(Origin => true));
 
 app.UseAuthentication();
