@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\jesse\\VSCode\\InvestTrackr Project\\investtrackr\\api\\api.csproj": {}
+    "C:\\Users\\jesse\\VSCode\\InvestTrackr Project\\InvestTrackr\\api\\api.csproj": {}
   },
   "projects": {
-    "C:\\Users\\jesse\\VSCode\\InvestTrackr Project\\investtrackr\\api\\api.csproj": {
+    "C:\\Users\\jesse\\VSCode\\InvestTrackr Project\\InvestTrackr\\api\\api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\jesse\\VSCode\\InvestTrackr Project\\investtrackr\\api\\api.csproj",
+        "projectUniqueName": "C:\\Users\\jesse\\VSCode\\InvestTrackr Project\\InvestTrackr\\api\\api.csproj",
         "projectName": "api",
-        "projectPath": "C:\\Users\\jesse\\VSCode\\InvestTrackr Project\\investtrackr\\api\\api.csproj",
+        "projectPath": "C:\\Users\\jesse\\VSCode\\InvestTrackr Project\\InvestTrackr\\api\\api.csproj",
         "packagesPath": "C:\\Users\\jesse\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\jesse\\VSCode\\InvestTrackr Project\\investtrackr\\api\\obj\\",
+        "outputPath": "C:\\Users\\jesse\\VSCode\\InvestTrackr Project\\InvestTrackr\\api\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\jesse\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -118,7 +118,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
