@@ -1,4 +1,4 @@
-'[InvestTrackr Logo](https://github.com/iamjessee/InvestTrackr/blob/master/logo.png)
+'[InvestTrackr Logo](https://github.com/iamjessee/InvestTrackr/blob/master/logo.png)'
 
 **Real-time stock data tracker and portfolio management tool.**
 
