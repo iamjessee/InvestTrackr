@@ -16,7 +16,7 @@ InvestrTrackr is a stock tracking and portfolio management tool that fetches rea
 ## Technologies Used
 
 - **Backend:** ASP.NET Core, C#
-- **Database:** SQL Server / PostgreSQL (whichever applies)
+- **Database:** SQL Server
 - **Frontend:** React, TypeScript
 - **API:** FMP Stock API
 - **Authentication:** JWT for user authentication
