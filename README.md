@@ -1,4 +1,4 @@
-# INVESTTRACKR
+'[InvestTrackr Logo](https://github.com/iamjessee/InvestTrackr/blob/master/logo.png)
 
 **Real-time stock data tracker and portfolio management tool.**
 
@@ -47,3 +47,5 @@ InvestrTrackr is a stock tracking and portfolio management tool that fetches rea
 - 🔧 Complete front-end interface
 - 📈 Add data visualization features
 - ⚙️ Optimize database queries for improved performance
+
+
