@@ -19,7 +19,7 @@ const CardList: React.FC<Props> = ({
           return (
             <Card
               id={result.symbol}
-              key={uuidv4()}
+              key={result.symbol}
               searchResult={result}
               onPortfolioCreate={onPortfolioCreate}
             />

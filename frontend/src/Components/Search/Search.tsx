@@ -1,9 +1,9 @@
 import React, { ChangeEvent, useState, SyntheticEvent, FormEvent } from "react";
 
 interface Props {
-  onSearchSubmit: (e: SyntheticEvent) => void;
   search: string | undefined;
   handleSearchChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onSearchSubmit: (e: SyntheticEvent) => void;
 }
 
 const Search: React.FC<Props> = ({

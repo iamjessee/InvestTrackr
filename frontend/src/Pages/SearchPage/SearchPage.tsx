@@ -12,35 +12,18 @@ import {
   portfolioGetAPI,
 } from "../../Services/PortfolioService";
 import { toast } from "react-toastify";
+import { useAuth } from "../../Context/useAuth";
 
 interface Props {}
 
 const SearchPage = (props: Props) => {
+  const { portfolioValues, setPortfolioValues } = useAuth();
   const [search, setSearch] = useState<string>("");
-  const [portfolioValues, setPortfolioValues] = useState<PortfolioGet[] | null>(
-    []
-  );
   const [searchResult, setSearchResult] = useState<CompanySearch[]>([]);
   const [serverError, setServerError] = useState<string | null>(null);
 
-  useEffect(() => {
-    getPortfolio();
-  }, []);
-
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
-  };
-
-  const getPortfolio = () => {
-    portfolioGetAPI()
-      .then((res) => {
-        if (res?.data) {
-          setPortfolioValues(res?.data);
-        }
-      })
-      .catch((e) => {
-        setPortfolioValues(null);
-      });
   };
 
   const onPortfolioCreate = (e: any) => {
@@ -49,7 +32,6 @@ const SearchPage = (props: Props) => {
       .then((res) => {
         if (res?.status === 204) {
           toast.success("Stock added to portfolio!");
-          getPortfolio();
         }
       })
       .catch((e) => {
@@ -62,7 +44,6 @@ const SearchPage = (props: Props) => {
     portfolioDeleteAPI(e.target[0].value).then((res) => {
       if (res?.status == 200) {
         toast.success("Stock deleted from portfolio!");
-        getPortfolio();
       }
     });
   };
@@ -70,7 +51,6 @@ const SearchPage = (props: Props) => {
   const onSearchSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
     const result = await searchCompanies(search);
-    //setServerError(result.data);
     if (typeof result === "string") {
       setServerError(result);
     } else if (Array.isArray(result.data)) {

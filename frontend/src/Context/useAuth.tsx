@@ -5,14 +5,19 @@ import { loginAPI, registerAPI } from "../Services/AuthService";
 import { toast } from "react-toastify";
 import React from "react";
 import axios from "axios";
+import { PortfolioGet } from "../Models/Portfolio";
+import { portfolioGetAPI } from "../Services/PortfolioService";
 
 type UserContextType = {
   user: UserProfile | null;
   token: string | null;
+  portfolioValues: PortfolioGet[];
+  setPortfolioValues: (values: PortfolioGet[]) => void;
   registerUser: (email: string, username: string, password: string) => void;
   loginUser: (username: string, password: string) => void;
   logout: () => void;
   isLoggedIn: () => boolean;
+  resetPortfolio: () => void;
 };
 
 type Props = { children: React.ReactNode };
@@ -23,6 +28,7 @@ export const UserProvider = ({ children }: Props) => {
   const navigate = useNavigate();
   const [token, setToken] = useState<string | null>(null);
   const [user, setUser] = useState<UserProfile | null>(null);
+  const [portfolioValues, setPortfolioValues] = useState<PortfolioGet[]>([]);
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
@@ -35,6 +41,29 @@ export const UserProvider = ({ children }: Props) => {
     }
     setIsReady(true);
   }, []);
+
+  // Fetch portfolio whenever user or token changes
+  useEffect(() => {
+    const fetchPortfolio = async () => {
+      if (user && token) {
+        try {
+          const res = await portfolioGetAPI();
+          if (res?.data) {
+            setPortfolioValues(res.data);
+          } else {
+            toast.error("No portfolio data found");
+          }
+        } catch (error) {
+          setPortfolioValues([]);
+          toast.error("Failed to fetch portfolio");
+        }
+      } else {
+        resetPortfolio();
+      }
+    };
+
+    fetchPortfolio();
+  }, [user, token]);
 
   const registerUser = async (
     email: string,
@@ -52,11 +81,11 @@ export const UserProvider = ({ children }: Props) => {
           localStorage.setItem("user", JSON.stringify(userObj));
           setToken(res?.data.token!);
           setUser(userObj!);
-          toast.success("Login Success!");
+          toast.success("Registration Success!");
           navigate("/search");
         }
       })
-      .catch((e) => toast.warning("Server error occured"));
+      .catch(() => toast.warning("Server error occurred"));
   };
 
   const loginUser = async (username: string, password: string) => {
@@ -75,7 +104,7 @@ export const UserProvider = ({ children }: Props) => {
           navigate("/search");
         }
       })
-      .catch((e) => toast.warning("Server error occured"));
+      .catch(() => toast.warning("Server error occurred"));
   };
 
   const isLoggedIn = () => {
@@ -86,13 +115,28 @@ export const UserProvider = ({ children }: Props) => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     setUser(null);
-    setToken("");
-    navigate("/");
+    setToken(null);
+    resetPortfolio();
+    navigate("/login");
+  };
+
+  const resetPortfolio = () => {
+    setPortfolioValues([]);
   };
 
   return (
     <UserContext.Provider
-      value={{ loginUser, user, token, logout, isLoggedIn, registerUser }}
+      value={{
+        loginUser,
+        user,
+        token,
+        logout,
+        isLoggedIn,
+        registerUser,
+        resetPortfolio,
+        portfolioValues,
+        setPortfolioValues,
+      }}
     >
       {isReady ? children : null}
     </UserContext.Provider>
@@ -100,3 +144,5 @@ export const UserProvider = ({ children }: Props) => {
 };
 
 export const useAuth = () => React.useContext(UserContext);
+
+export default UserContext;
