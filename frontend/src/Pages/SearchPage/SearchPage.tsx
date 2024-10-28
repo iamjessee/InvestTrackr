@@ -28,6 +28,7 @@ const SearchPage = (props: Props) => {
 
   const onPortfolioCreate = (e: any) => {
     e.preventDefault();
+    debugger;
     portfolioAddAPI(e.target[0].value)
       .then((res) => {
         if (res?.status === 204) {
