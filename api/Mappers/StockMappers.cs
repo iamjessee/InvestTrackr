@@ -1,4 +1,5 @@
 using api.Dtos;
+using api.Dtos.Stock;
 using api.Models;
 
 namespace api.Mappers
@@ -47,6 +48,19 @@ namespace api.Mappers
                 LastDiv = fmpStock.lastDiv,
                 Industry = fmpStock.industry,
                 MarketCap = fmpStock.mktCap
+            };
+        }
+
+        // Converts FMPStock data to Search Stock Dto
+        public static SearchStockRequestDto ToStockSearchFromFMPStock(this FMPStock fmpStock)
+        {
+            return new SearchStockRequestDto
+            {
+                Currency = fmpStock.currency,
+                ExchangeShortName = fmpStock.exchangeShortName,
+                Name = fmpStock.companyName,
+                StockExchange = fmpStock.exchange,
+                Symbol = fmpStock.symbol,
             };
         }
     }

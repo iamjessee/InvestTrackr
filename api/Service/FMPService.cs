@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Dtos;
+using api.Dtos.Stock;
 using api.Interfaces;
 using api.Mappers;
 using api.Models;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace api.Service
@@ -62,6 +64,40 @@ namespace api.Service
                 Console.WriteLine($"Error fetching stock data: {ex.Message}");
                 Console.WriteLine(ex.StackTrace);
                 return null;
+            }
+        }
+
+        public async Task<List<SearchStockRequestDto>> SearchCompaniesAsync(string query)
+        {
+            try
+            {
+                var apikey = _configuration["FMPKey"];
+                var result = await _httpClient.GetAsync($"https://financialmodelingprep.com/api/v3/search?query={query}&limit=10&exchange=NASDAQ&apikey={apikey}");
+
+                if(result.IsSuccessStatusCode)
+                {
+                    var content = await result.Content.ReadAsStringAsync();
+
+                    var task = JsonConvert.DeserializeObject<SearchStockRequestDto[]>(content);
+
+                    if(task != null && task.Length > 0)
+                    {
+                        return task.ToList();
+                    }
+
+                    Console.WriteLine($"No results found for {query}");
+                    return new List<SearchStockRequestDto>();
+                }
+
+                // Log the status code if the API call failed
+                Console.WriteLine($"API call failed with status code: {result.StatusCode}");
+                return new List<SearchStockRequestDto>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error fetching company data: {ex.Message}");
+                Console.WriteLine(ex.StackTrace);
+                return new List<SearchStockRequestDto>();
             }
         }
     }
