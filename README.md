@@ -4,7 +4,7 @@
 
 ## Description
 
-InvestrTrackr is a stock tracking and portfolio management tool that fetches real-time stock data, stores it in a database, and allows users to monitor their investments in one place.
+InvestTrackr is a stock tracking and portfolio management tool that fetches real-time stock data, stores it in a database, and allows users to monitor their investments in one place.
 
 ## Features
 
@@ -30,7 +30,7 @@ InvestrTrackr is a stock tracking and portfolio management tool that fetches rea
   - cd InvestrTrackr
 
 3. **Install necessary dependencies:**
-  - npm install   # For front-end dependencies, if applicable
+  - npm install   # For front-end dependencies
   - dotnet restore  # For backend dependencies
 
 4. **Set up the database connections:**
