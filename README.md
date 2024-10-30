@@ -48,4 +48,4 @@ InvestTrackr is a stock tracking and portfolio management tool that fetches real
 - 📈 Add data visualization features
 - ⚙️ Optimize database queries for improved performance
 
-![InvestTrackr Demo]([https://github.com/iamjessee/InvestTrackr/blob/master/HomePage.png](https://github.com/iamjessee/InvestTrackr/blob/bugfix/service-migration/INVESTTRACKRdemo.gif))
+![InvestTrackr Demo](https://raw.githubusercontent.com/iamjessee/InvestTrackr/bugfix/service-migration/INVESTTRACKRdemo.gif)
