@@ -32,5 +32,18 @@ namespace api.Controllers
 
             return Ok(companies);
         }
+
+        [HttpGet("companyprofile")]
+        public async Task<IActionResult> GetCompanyProfile(string ticker)
+        {
+            var companyProfile = await _fmpService.GetCompanyProfileAsync(ticker);
+
+            if(companyProfile == null)
+            {
+                return NotFound("Error retrieving company profile data");
+            }
+
+            return Ok(companyProfile);
+        }
     }
 }

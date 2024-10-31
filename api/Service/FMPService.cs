@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Dtos;
+using api.Dtos.Company;
 using api.Dtos.Stock;
 using api.Interfaces;
 using api.Mappers;
@@ -67,6 +68,43 @@ namespace api.Service
             }
         }
 
+        public async Task<CompanyProfileDto> GetCompanyProfileAsync(string ticker)
+        {
+            try
+            {
+                var apikey = _configuration["FMPKey"];
+
+                var result = await _httpClient.GetAsync($"https://financialmodelingprep.com/api/v3/profile/{ticker}?apikey={apikey}");
+
+                if(result.IsSuccessStatusCode)
+                {
+                    var content = await result.Content.ReadAsStringAsync();
+
+                    var tasks = JsonConvert.DeserializeObject<FMPStock[]>(content);
+
+                    if(tasks != null && tasks.Length > 0)
+                    {
+                        return tasks[0].ToCompanyProfileDto();
+                    }
+                }
+
+                Console.WriteLine($"API call failed with status code: {result.StatusCode}");
+                return null;
+            }
+            catch (Exception ex)
+            {
+                // Log any exceptions that occur during the API call
+                Console.WriteLine($"Error fetching company profile data: {ex.Message}");
+                Console.WriteLine(ex.StackTrace);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Asynchronously retrieves stock information by search string.
+        /// </summary>
+        /// <param name="query">Search term inserted by user</param>
+        /// <returns>List of matching companies related to search term if found</returns>
         public async Task<List<SearchStockRequestDto>> SearchCompaniesAsync(string query)
         {
             try
