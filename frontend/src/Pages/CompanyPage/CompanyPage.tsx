@@ -6,7 +6,6 @@ import Sidebar from "../../Components/Sidebar/Sidebar";
 import CompanyDashboard from "../../Components/CompanyDashboard/CompanyDashboard";
 import Tile from "../../Components/Tile/Tile";
 import Spinner from "../../Components/Spinners/Spinner";
-import CompFinder from "../../Components/CompFinder/CompFinder";
 import TenKFinder from "../../Components/TenKFinder/TenKFinder";
 
 interface Props {}
@@ -50,21 +49,7 @@ const CompanyPage = (props: Props) => {
 
     // Cleanup interval on component unmount
     return () => clearInterval(intervalId);
-  }, [ticker]); // Only re-run if ticker chang
-  //   const getProfileInit = async () => {
-  //     if (ticker) {
-  //       const result = await getCompanyProfile(ticker!); // Call the service
-  //       if (result.error) {
-  //         setError(result.error); // Set error if there's an issue
-  //         setCompany(null); // Clear company data
-  //       } else {
-  //         setCompany(result.data); // Set company data if successful
-  //         setError(null); // Clear any existing error
-  //       }
-  //     }
-  //   };
-  //   getProfileInit();
-  // });
+  }, [ticker]); // Only re-run if ticker change
 
   return (
     <>
@@ -82,7 +67,6 @@ const CompanyPage = (props: Props) => {
                 <Tile title="Price" subTitle={"$" + company.price.toString()} />
                 <Tile title="DCF" subTitle={"$" + company.dcf.toString()} />
                 <Tile title="Sector" subTitle={company.sector} />
-                <CompFinder ticker={company.symbol} />
                 <TenKFinder ticker={company.symbol} />
                 <p className="bg-white shadow rounded text-medium font-medium text-gray-900 p-3 mt-1 m-4">
                   {company.description}

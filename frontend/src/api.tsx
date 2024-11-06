@@ -52,6 +52,7 @@ export const getKeyMetrics = async (query: string) => {
     return data;
   } catch (error: any) {
     console.log("error message: ", error.message);
+    return null;
   }
 };
 
@@ -63,6 +64,7 @@ export const getIncomeStatement = async (query: string) => {
     return data;
   } catch (error: any) {
     console.log("error message: ", error.message);
+    return null;
   }
 };
 
@@ -74,6 +76,7 @@ export const getBalanceSheet = async (query: string) => {
     return data;
   } catch (error: any) {
     console.log("error message: ", error.message);
+    return null;
   }
 };
 
@@ -85,19 +88,21 @@ export const getCashFlow = async (query: string) => {
     return data;
   } catch (error: any) {
     console.log("error message: ", error.message);
+    return null;
   }
 };
 
-export const getCompData = async (query: string) => {
-  try {
-    const data = await axios.get<CompanyCompData[]>(
-      `https://financialmodelingprep.com/api/v4/stock_peers?symbol=${query}&apikey=${process.env.REACT_APP_API_KEY}`
-    );
-    return data;
-  } catch (error: any) {
-    console.log("error message: ", error.message);
-  }
-};
+// export const getCompData = async (query: string) => {
+//   try {
+//     const data = await axios.get<CompanyCompData[]>(
+//       `https://financialmodelingprep.com/api/v4/stock_peers?symbol=${query}&apikey=${process.env.REACT_APP_API_KEY}`
+//     );
+//     return data;
+//   } catch (error: any) {
+//     console.log("error message: ", error.message);
+//     return null;
+//   }
+// };
 
 export const getTenK = async (query: string) => {
   try {
@@ -107,6 +112,7 @@ export const getTenK = async (query: string) => {
     return data;
   } catch (error: any) {
     console.log("error message: ", error.message);
+    return null;
   }
 };
 
@@ -118,5 +124,6 @@ export const getHistoricalDividend = async (query: string) => {
     return data;
   } catch (error: any) {
     console.log("error message: ", error.message);
+    return null;
   }
 };

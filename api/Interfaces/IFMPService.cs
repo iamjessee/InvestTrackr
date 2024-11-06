@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using api.Dtos.Company;
 using api.Dtos.Stock;
 using api.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace api.Interfaces
 {
@@ -13,5 +14,6 @@ namespace api.Interfaces
         Task<Stock> FindStockBySymbolAsync(string symbol);
         Task<List<SearchStockRequestDto>> SearchCompaniesAsync(string query);
         Task<CompanyProfileDto> GetCompanyProfileAsync(string ticker);
+        Task<List<CompDataDto>> GetCompData(string query);
     }
 }

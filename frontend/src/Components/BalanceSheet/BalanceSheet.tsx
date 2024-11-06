@@ -82,18 +82,25 @@ const config = [
 
 const BalanceSheet = (props: Props) => {
   const ticker = useOutletContext<string>();
-  const [companyData, setCompanyData] = useState<CompanyBalanceSheet>();
+  const [companyData, setCompanyData] = useState<CompanyBalanceSheet[]>();
   useEffect(() => {
     const getCompanyData = async () => {
       const value = await getBalanceSheet(ticker!);
-      setCompanyData(value?.data[0]);
+      setCompanyData(value?.data);
     };
     getCompanyData();
-  }, []);
+  }, [ticker]);
+
   return (
     <>
       {companyData ? (
-        <RatioList config={config} data={companyData} />
+        <RatioList
+          config={config}
+          data={companyData.map((statement, index) => ({
+            ...statement,
+            key: `${statement.date}-${index || index}-${index}`,
+          }))}
+        />
       ) : (
         <Spinner />
       )}

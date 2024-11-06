@@ -8,6 +8,7 @@ using api.Dtos.Stock;
 using api.Interfaces;
 using api.Mappers;
 using api.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -41,7 +42,7 @@ namespace api.Service
                 if (result.IsSuccessStatusCode)
                 {
                     var content = await result.Content.ReadAsStringAsync();
-                    
+
                     // Deserialize the JSON response into an array of FMPStock
                     var tasks = JsonConvert.DeserializeObject<FMPStock[]>(content);
 
@@ -63,6 +64,42 @@ namespace api.Service
             {
                 // Log any exceptions that occur during the API call
                 Console.WriteLine($"Error fetching stock data: {ex.Message}");
+                Console.WriteLine(ex.StackTrace);
+                return null;
+            }
+        }
+
+        public async Task<List<CompDataDto>> GetCompData(string query)
+        {
+            try
+            {
+                var apikey = _configuration["FMPKey"];
+
+                var result = await _httpClient.GetAsync($"https://financialmodelingprep.com/api/v4/stock_peers?symbol=${query}&apikey={apikey}");
+
+                if(result.IsSuccessStatusCode)
+                {
+                    var content = await result.Content.ReadAsStringAsync();
+                    Console.WriteLine(content);
+
+                    var tasks = JsonConvert.DeserializeObject<List<CompDataDto>>(content);
+
+                    if (tasks != null)
+                    {
+                        Console.WriteLine(tasks);
+                        return tasks ?? new List<CompDataDto>();
+                    }
+
+                    Console.WriteLine($"No comp data found");
+                    return null;
+                }
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                // Log any exceptions that occur during the API call
+                Console.WriteLine($"Error fetching comp data: {ex.Message}");
                 Console.WriteLine(ex.StackTrace);
                 return null;
             }

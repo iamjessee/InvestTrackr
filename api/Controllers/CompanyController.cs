@@ -45,5 +45,18 @@ namespace api.Controllers
 
             return Ok(companyProfile);
         }
+
+        [HttpGet("companycompdata/{symbol}")]
+        public async Task<IActionResult> GetCompData(string symbol)
+        {
+            var compData = await _fmpService.GetCompData(symbol);
+
+            if(compData == null)
+            {
+                return NotFound($"Error retreving comp data for {symbol}");
+            }
+
+            return Ok(compData);
+        }
     }
 }
