@@ -20,6 +20,7 @@ namespace api.Controllers
             _fmpService = fmpService;
         }
 
+        // Searches FMP stock api for companies that match search query
         [HttpGet("search")]
         public async Task<ActionResult<List<Stock>>> SearchCompanies([FromQuery] string query)
         {
@@ -33,6 +34,7 @@ namespace api.Controllers
             return Ok(companies);
         }
 
+        // Retrevie selected company profile data based on searched and selected ticker
         [HttpGet("companyprofile")]
         public async Task<IActionResult> GetCompanyProfile(string ticker)
         {
@@ -44,19 +46,6 @@ namespace api.Controllers
             }
 
             return Ok(companyProfile);
-        }
-
-        [HttpGet("companycompdata/{symbol}")]
-        public async Task<IActionResult> GetCompData(string symbol)
-        {
-            var compData = await _fmpService.GetCompData(symbol);
-
-            if(compData == null)
-            {
-                return NotFound($"Error retreving comp data for {symbol}");
-            }
-
-            return Ok(compData);
         }
     }
 }
