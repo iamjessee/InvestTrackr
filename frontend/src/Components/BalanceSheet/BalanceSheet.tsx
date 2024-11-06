@@ -14,7 +14,7 @@ type Props = {};
 
 const config = [
   {
-    label: <div className="font-bold">Total Assets</div>,
+    label: <span className="font-bold">Total Assets</span>,
     render: (company: CompanyBalanceSheet) =>
       formatLargeMonetaryNumber(company.totalAssets),
   },
@@ -49,7 +49,7 @@ const config = [
       formatLargeMonetaryNumber(company.otherCurrentLiabilities),
   },
   {
-    label: <div className="font-bold">Total Liabilites</div>,
+    label: <span className="font-bold">Total Liabilites</span>,
     render: (company: CompanyBalanceSheet) =>
       formatLargeMonetaryNumber(company.totalLiabilities),
   },
@@ -82,11 +82,11 @@ const config = [
 
 const BalanceSheet = (props: Props) => {
   const ticker = useOutletContext<string>();
-  const [companyData, setCompanyData] = useState<CompanyBalanceSheet[]>();
+  const [companyData, setCompanyData] = useState<CompanyBalanceSheet>();
   useEffect(() => {
     const getCompanyData = async () => {
       const value = await getBalanceSheet(ticker!);
-      setCompanyData(value?.data);
+      setCompanyData(value?.data[0]);
     };
     getCompanyData();
   }, [ticker]);
@@ -96,10 +96,10 @@ const BalanceSheet = (props: Props) => {
       {companyData ? (
         <RatioList
           config={config}
-          data={companyData.map((statement, index) => ({
-            ...statement,
-            key: `${statement.date}-${index || index}-${index}`,
-          }))}
+          data={{
+            ...companyData,
+            key: `${companyData.date}-${companyData.cik}`,
+          }}
         />
       ) : (
         <Spinner />
