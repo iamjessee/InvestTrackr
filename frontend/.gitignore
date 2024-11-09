@@ -1,3 +1,8 @@
+
+This .gitignore file should successfully ignore various .env files in specific environments (.env.local, .env.development.local, etc.), but it’s missing an entry for the main .env file. To ensure your primary .env file is also ignored, add .env by itself, like this:
+
+plaintext
+Copy code
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies

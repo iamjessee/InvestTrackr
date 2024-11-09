@@ -32,7 +32,6 @@ InvestTrackr is a stock tracking and portfolio management tool that fetches real
 - cd InvestTrackr
 
 3. **Install necessary dependencies:**
-
 - npm install # For front-end dependencies
 - dotnet restore # For backend dependencies
 
