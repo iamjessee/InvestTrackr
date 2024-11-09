@@ -31,21 +31,36 @@ export const UserProvider = ({ children }: Props) => {
   const [portfolioValues, setPortfolioValues] = useState<PortfolioGet[]>([]);
   const [isReady, setIsReady] = useState(false);
 
+  // Load user and token from localStorage on first render
   useEffect(() => {
-    const user = localStorage.getItem("user");
-    const token = localStorage.getItem("token");
-    if (user && token) {
-      setUser(JSON.parse(user));
-      setToken(token);
-      axios.defaults.headers.common["Authorization"] = "Bearer " + token;
+    const storedUser = localStorage.getItem("user");
+    const storedToken = localStorage.getItem("token");
+
+    if (storedUser && storedToken) {
+      setUser(JSON.parse(storedUser));
+      setToken(storedToken);
+
+      // Set axios Authorization header on first load if token is present
+      axios.defaults.headers.common["Authorization"] = `Bearer ${storedToken}`;
     }
-    setIsReady(true);
+
+    setIsReady(true); // Indicate that initial setup is complete
   }, []);
 
-  // Fetch portfolio whenever user or token changes
+  // Update Authorization header automatically whenever token changes
+  useEffect(() => {
+    if (token) {
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    } else {
+      delete axios.defaults.headers.common["Authorization"];
+    }
+  }, [token]);
+
+  // Fetch portfolio only if isReady is true and token is set
   useEffect(() => {
     const fetchPortfolio = async () => {
-      if (user && token) {
+      if (token) {
+        // Only fetch if token is present
         try {
           const res = await portfolioGetAPI();
           if (res?.data) {
@@ -62,8 +77,11 @@ export const UserProvider = ({ children }: Props) => {
       }
     };
 
-    fetchPortfolio();
-  }, [user, token]);
+    // Fetch portfolio after initial setup (isReady) and only if token is present
+    if (isReady && token) {
+      fetchPortfolio();
+    }
+  }, [isReady, token]);
 
   const registerUser = async (
     email: string,
@@ -73,6 +91,7 @@ export const UserProvider = ({ children }: Props) => {
     await registerAPI(email, username, password)
       .then((res) => {
         if (res) {
+          // Store token and user details after successful registration
           localStorage.setItem("token", res?.data.token);
           const userObj = {
             userName: res?.data.userName,
@@ -81,6 +100,12 @@ export const UserProvider = ({ children }: Props) => {
           localStorage.setItem("user", JSON.stringify(userObj));
           setToken(res?.data.token!);
           setUser(userObj!);
+
+          // Immediately set axios Authorization header
+          axios.defaults.headers.common[
+            "Authorization"
+          ] = `Bearer ${res?.data.token}`;
+
           toast.success("Registration Success!");
           navigate("/search");
         }
@@ -92,6 +117,7 @@ export const UserProvider = ({ children }: Props) => {
     await loginAPI(username, password)
       .then((res) => {
         if (res) {
+          // Store token and user details after successful login
           localStorage.setItem("token", res?.data.token);
           const userObj = {
             userName: res?.data.userName,
@@ -100,6 +126,12 @@ export const UserProvider = ({ children }: Props) => {
           localStorage.setItem("user", JSON.stringify(userObj));
           setToken(res?.data.token!);
           setUser(userObj!);
+
+          // Immediately set axios Authorization header
+          axios.defaults.headers.common[
+            "Authorization"
+          ] = `Bearer ${res?.data.token}`;
+
           toast.success("Login Success!");
           navigate("/search");
         }
@@ -112,16 +144,20 @@ export const UserProvider = ({ children }: Props) => {
   };
 
   const logout = () => {
+    // Remove token and user details from localStorage
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+
+    // Clear user and token state, reset portfolio, and remove Authorization header
     setUser(null);
     setToken(null);
+    delete axios.defaults.headers.common["Authorization"];
     resetPortfolio();
     navigate("/login");
   };
 
   const resetPortfolio = () => {
-    setPortfolioValues([]);
+    setPortfolioValues([]); // Reset portfolio state
   };
 
   return (

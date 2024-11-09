@@ -61,9 +61,16 @@ const CashflowStatement = (props: Props) => {
       setCashFlowData(result!.data);
     };
     getRatios();
-  }, []);
+  }, [ticker]);
+
   return cashFlowData ? (
-    <Table config={config} data={cashFlowData}></Table>
+    <Table
+      config={config}
+      data={cashFlowData.map((statement, index) => ({
+        ...statement,
+        key: `${statement.date}-${index}`,
+      }))}
+    />
   ) : (
     <Spinner />
   );

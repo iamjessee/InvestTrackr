@@ -11,6 +11,20 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add CORS service before other services
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReactApp", 
+        policy =>
+        {
+            policy
+                .WithOrigins("http://localhost:3000")
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials();
+        });
+});
+
 // Add services to the container
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -104,12 +118,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors(x => x 
-.WithOrigins("http://localhost:3000")
-.AllowAnyMethod()
-.AllowCredentials()
-.WithHeaders("Content-Type", "Authorization")
-.SetIsOriginAllowed(Origin => true));
+// Use the named CORS policy instead of inline configuration
+app.UseCors("AllowReactApp");
 
 app.UseAuthentication();
 app.UseAuthorization();

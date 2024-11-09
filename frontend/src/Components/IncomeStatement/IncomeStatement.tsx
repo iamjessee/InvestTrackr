@@ -8,6 +8,7 @@ import {
   formatLargeMonetaryNumber,
   formatRatio,
 } from "../../Helpers/NumberFormatting";
+import { date } from "yup";
 
 type Props = {};
 
@@ -87,11 +88,18 @@ const IncomeStatement = (props: Props) => {
       setIncomeStatement(result!.data);
     };
     getRatios();
-  }, []);
+  }, [ticker]);
+
   return (
     <>
       {incomeStatement ? (
-        <Table config={configs} data={incomeStatement} />
+        <Table
+          config={configs}
+          data={incomeStatement.map((statement, index) => ({
+            ...statement,
+            key: `${statement.date}-${index}`, // Combine date with index for uniqueness
+          }))}
+        />
       ) : (
         <Spinner />
       )}

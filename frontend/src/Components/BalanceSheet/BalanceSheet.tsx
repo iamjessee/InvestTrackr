@@ -14,7 +14,7 @@ type Props = {};
 
 const config = [
   {
-    label: <div className="font-bold">Total Assets</div>,
+    label: <span className="font-bold">Total Assets</span>,
     render: (company: CompanyBalanceSheet) =>
       formatLargeMonetaryNumber(company.totalAssets),
   },
@@ -49,7 +49,7 @@ const config = [
       formatLargeMonetaryNumber(company.otherCurrentLiabilities),
   },
   {
-    label: <div className="font-bold">Total Liabilites</div>,
+    label: <span className="font-bold">Total Liabilites</span>,
     render: (company: CompanyBalanceSheet) =>
       formatLargeMonetaryNumber(company.totalLiabilities),
   },
@@ -89,11 +89,18 @@ const BalanceSheet = (props: Props) => {
       setCompanyData(value?.data[0]);
     };
     getCompanyData();
-  }, []);
+  }, [ticker]);
+
   return (
     <>
       {companyData ? (
-        <RatioList config={config} data={companyData} />
+        <RatioList
+          config={config}
+          data={{
+            ...companyData,
+            key: `${companyData.date}-${companyData.cik}`,
+          }}
+        />
       ) : (
         <Spinner />
       )}

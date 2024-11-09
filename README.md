@@ -24,17 +24,20 @@ InvestTrackr is a stock tracking and portfolio management tool that fetches real
 ## To run this project locally
 
 1. **Clone the repository:**
-  - git clone https://github.com/iamjessee/InvestrTrackr.git
+
+- git clone https://github.com/iamjessee/InvestTrackr.git
 
 2. **Navigate to the project directory:**
-  - cd InvestrTrackr
+
+- cd InvestTrackr
 
 3. **Install necessary dependencies:**
-  - npm install   # For front-end dependencies
-  - dotnet restore  # For backend dependencies
+- npm install # For front-end dependencies
+- dotnet restore # For backend dependencies
 
 4. **Set up the database connections:**
--  Edit the appsettings.json file to match your local configuration (e.g., connection string, API keys).
+
+- Edit the appsettings.json file to match your local configuration (e.g., connection string, API keys).
 
 ## What I Learned
 
@@ -44,8 +47,9 @@ InvestTrackr is a stock tracking and portfolio management tool that fetches real
 - Using TypeScript in React to build the front end
 
 ## Future Improvements / To-Do
+
 - 🔧 Complete front-end interface
 - 📈 Add data visualization features
 - ⚙️ Optimize database queries for improved performance
 
-![InvestTrackr Logo](https://github.com/iamjessee/InvestTrackr/blob/master/HomePage.png)
+![InvestTrackr Demo](https://raw.githubusercontent.com/iamjessee/InvestTrackr/bugfix/service-migration/INVESTTRACKRdemo.gif)

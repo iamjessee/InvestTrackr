@@ -1,11 +1,9 @@
-import React, { useState, ChangeEvent, SyntheticEvent, useEffect } from "react";
-import Navbar from "../../Components/Navbar/Navbar";
+import React, { useState, ChangeEvent, SyntheticEvent } from "react";
 import { CompanySearch } from "../../company";
-import { searchCompanies } from "../../api";
+import { searchAPI } from "../../Services/CompanySearchService";
 import Search from "../../Components/Search/Search";
 import ListPortfolio from "../../Components/Portfolio/ListPortfolio/ListPortfolio";
 import CardList from "../../Components/CardList/CardList";
-import { PortfolioGet } from "../../Models/Portfolio";
 import {
   portfolioAddAPI,
   portfolioDeleteAPI,
@@ -26,32 +24,44 @@ const SearchPage = (props: Props) => {
     setSearch(e.target.value);
   };
 
-  const onPortfolioCreate = (e: any) => {
+  const onPortfolioCreate = async (e: any) => {
     e.preventDefault();
-    debugger;
-    portfolioAddAPI(e.target[0].value)
-      .then((res) => {
-        if (res?.status === 204) {
-          toast.success("Stock added to portfolio!");
+    try {
+      const response = await portfolioAddAPI(e.currentTarget[0].value);
+      if (response?.status === 204) {
+        toast.success("Stock added to portfolio!");
+        const updatedPortfolio = await portfolioGetAPI();
+        if (updatedPortfolio?.data) {
+          setPortfolioValues(updatedPortfolio.data);
         }
-      })
-      .catch((e) => {
-        toast.warning("Could not add stock to portfolio!");
-      });
+      }
+    } catch (error) {
+      toast.warning("Could not add stock to portfolio!");
+      console.error("Error adding to portfolio:", error);
+    }
   };
 
-  const onPortfolioDelete = (e: any) => {
+  const onPortfolioDelete = async (e: any) => {
     e.preventDefault();
-    portfolioDeleteAPI(e.target[0].value).then((res) => {
-      if (res?.status == 200) {
+    try {
+      const response = await portfolioDeleteAPI(e.currentTarget[0].value);
+      if (response?.status === 200) {
         toast.success("Stock deleted from portfolio!");
+        const updatedPortfolio = await portfolioGetAPI();
+        if (updatedPortfolio?.data) {
+          setPortfolioValues(updatedPortfolio.data);
+        }
       }
-    });
+    } catch (error) {
+      toast.warning("Could not add stock to portfolio!");
+      console.error("Error removing from portfolio:", error);
+    }
   };
 
   const onSearchSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
-    const result = await searchCompanies(search);
+    setServerError(null);
+    const result = await searchAPI(search);
     if (typeof result === "string") {
       setServerError(result);
     } else if (Array.isArray(result.data)) {
