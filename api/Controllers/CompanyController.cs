@@ -26,7 +26,7 @@ namespace api.Controllers
         {
             var companies = await _fmpService.SearchCompaniesAsync(query);
 
-            if(companies == null || companies.Count == 0)
+            if (companies == null || companies.Count == 0)
             {
                 return NotFound($"No company data found for {query}");
             }
@@ -40,12 +40,25 @@ namespace api.Controllers
         {
             var companyProfile = await _fmpService.GetCompanyProfileAsync(ticker);
 
-            if(companyProfile == null)
+            if (companyProfile == null)
             {
                 return NotFound("Error retrieving company profile data");
             }
 
             return Ok(companyProfile);
+        }
+
+        [HttpGet("keymetrics")]
+        public async Task<IActionResult> GetCompanyKeyMetrics([FromQuery] string query)
+        {
+            var KeyMetrics = await _fmpService.GetCompanyKeyMetricsAsync(query);
+
+            if (KeyMetrics == null)
+            {
+                return NotFound("Error retrieving company keymetric data");
+            }
+
+            return Ok(KeyMetrics);
         }
     }
 }

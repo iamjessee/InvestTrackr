@@ -14,5 +14,6 @@ namespace api.Interfaces
         Task<Stock> FindStockBySymbolAsync(string symbol);
         Task<List<SearchStockRequestDto>> SearchCompaniesAsync(string query);
         Task<CompanyProfileDto> GetCompanyProfileAsync(string ticker);
+        Task<CompanyKeyMetrics> GetCompanyKeyMetricsAsync(string query);
     }
 }

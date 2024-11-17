@@ -69,6 +69,44 @@ namespace api.Service
             }
         }
 
+        public async Task<CompanyKeyMetrics> GetCompanyKeyMetricsAsync(string query)
+        {
+            try
+            {
+                var apikey = _configuration["FMPKey"];
+
+                var result = await _httpClient.GetAsync($"https://financialmodelingprep.com/api/v3/key-metrics-ttm/{query}?limit=40&apikey={apikey}");
+
+                if (result.IsSuccessStatusCode)
+                {
+                    var content = await result.Content.ReadAsStringAsync();
+
+                    Console.WriteLine($"content: {content}");
+
+                    var tasks = JsonConvert.DeserializeObject<CompanyKeyMetrics[]>(content);
+
+                    foreach (var item in tasks)
+                        Console.WriteLine(JsonConvert.SerializeObject(item, Formatting.Indented));
+
+                    if(tasks != null && tasks.Length > 0)
+                    {
+                        return tasks[0];
+                    }
+
+                    return null;
+                }
+
+                return null;
+            }
+           catch (Exception ex)
+            {
+                // Log any exceptions that occur during the API call
+                Console.WriteLine($"Error fetching KeyMetrics data: {ex.Message}");
+                Console.WriteLine(ex.StackTrace);
+                return null;
+            }
+        }
+
         public async Task<CompanyProfileDto> GetCompanyProfileAsync(string ticker)
         {
             try
