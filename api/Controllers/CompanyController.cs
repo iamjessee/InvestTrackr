@@ -48,6 +48,7 @@ namespace api.Controllers
             return Ok(companyProfile);
         }
 
+        // Rereive keymetrics data based on selected company/ticker/symbol
         [HttpGet("keymetrics")]
         public async Task<IActionResult> GetCompanyKeyMetrics([FromQuery] string query)
         {
