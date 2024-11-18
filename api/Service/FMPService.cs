@@ -8,6 +8,7 @@ using api.Dtos.Stock;
 using api.Interfaces;
 using api.Mappers;
 using api.Models;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -29,13 +30,14 @@ namespace api.Service
         /// Asynchronously retrieves stock information by its symbol.
         /// </summary>
         /// <param name="symbol">The stock symbol to search for.</param>
-        /// <returns>A Task that represents the asynchronous operation, containing the stock information if found.</returns>
+        /// <returns>A Task containing the stock information if found; otherwise, null.</returns>
         public async Task<Stock> FindStockBySymbolAsync(string symbol)
         {
             try
             {
+                // Call the financial modeling API key
                 var apikey = _configuration["FMPKey"];
-                
+
                 // Call the financial modeling API to get stock profile
                 var result = await _httpClient.GetAsync($"https://financialmodelingprep.com/api/v3/profile/{symbol}?apikey={apikey}");
 
@@ -49,7 +51,7 @@ namespace api.Service
                     // Check if any stock data was returned
                     if (tasks != null && tasks.Length > 0)
                     {
-                        return tasks[0].ToStockFromFMPStock();
+                        return tasks[0].ToStockFromFMPStock(); // Maps API response to domain model
                     }
 
                     Console.WriteLine($"No stock data found for symbol: {symbol}");
@@ -69,7 +71,53 @@ namespace api.Service
             }
         }
 
-        public async Task<CompanyKeyMetrics> GetCompanyKeyMetricsAsync(string query)
+        /// <summary>
+        /// Asynchronously retrieves a company's income statement data.
+        /// Currently not implemented.
+        /// </summary>
+        /// <param name="query">The query string for the income statement.</param>
+        /// <returns>A Task that represents the operation.</returns>
+        public async Task<CompanyIncomeStatementDto> GetCompanyIncomeStatementAsync(string query)
+        {
+            try
+            {
+                var apikey = _configuration["FMPKey"];
+
+                var result = await _httpClient.GetAsync($"https://financialmodelingprep.com/api/v3/income-statement/{query}?limit=50&apikey={apikey}");
+
+                if(result.IsSuccessStatusCode)
+                {
+                    var content = await result.Content.ReadAsStringAsync();
+
+                    var tasks = JsonConvert.DeserializeObject<CompanyIncomeStatementDto[]>(content);
+
+                    if(tasks != null && tasks.Length > 0)
+                    {
+                        return tasks[0];
+                    }
+
+                    Console.WriteLine($"No Income Statements found for {query}: {result.StatusCode}");
+                    return null;
+                }
+
+                Console.WriteLine($"API call failed with status code: {result.StatusCode}");
+                return null;
+            }
+             catch (Exception ex)
+            {
+                // Log any exceptions that occur during the API call
+                Console.WriteLine($"Error fetching {query} Inncome Statement: {ex.Message}");
+                Console.WriteLine(ex.StackTrace);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Asynchronously retrieves key metrics for a company.
+        /// </summary>
+        /// <param name="query">The company symbol or identifier.</param>
+        /// <returns>A Task containing the key metrics data if found; otherwise, null.</returns>
+        public async Task<CompanyKeyMetricsDto> GetCompanyKeyMetricsAsync(string query)
         {
             try
             {
@@ -80,50 +128,11 @@ namespace api.Service
                 if (result.IsSuccessStatusCode)
                 {
                     var content = await result.Content.ReadAsStringAsync();
+                    var tasks = JsonConvert.DeserializeObject<CompanyKeyMetricsDto[]>(content);
 
-                    Console.WriteLine($"content: {content}");
-
-                    var tasks = JsonConvert.DeserializeObject<CompanyKeyMetrics[]>(content);
-
-                    foreach (var item in tasks)
-                        Console.WriteLine(JsonConvert.SerializeObject(item, Formatting.Indented));
-
-                    if(tasks != null && tasks.Length > 0)
+                    if (tasks != null && tasks.Length > 0)
                     {
-                        return tasks[0];
-                    }
-
-                    return null;
-                }
-
-                return null;
-            }
-           catch (Exception ex)
-            {
-                // Log any exceptions that occur during the API call
-                Console.WriteLine($"Error fetching KeyMetrics data: {ex.Message}");
-                Console.WriteLine(ex.StackTrace);
-                return null;
-            }
-        }
-
-        public async Task<CompanyProfileDto> GetCompanyProfileAsync(string ticker)
-        {
-            try
-            {
-                var apikey = _configuration["FMPKey"];
-
-                var result = await _httpClient.GetAsync($"https://financialmodelingprep.com/api/v3/profile/{ticker}?apikey={apikey}");
-
-                if(result.IsSuccessStatusCode)
-                {
-                    var content = await result.Content.ReadAsStringAsync();
-
-                    var tasks = JsonConvert.DeserializeObject<FMPStock[]>(content);
-
-                    if(tasks != null && tasks.Length > 0)
-                    {
-                        return tasks[0].ToCompanyProfileDto();
+                        return tasks[0]; // Return the first key metrics object
                     }
                 }
 
@@ -132,7 +141,40 @@ namespace api.Service
             }
             catch (Exception ex)
             {
-                // Log any exceptions that occur during the API call
+                Console.WriteLine($"Error fetching KeyMetrics data: {ex.Message}");
+                Console.WriteLine(ex.StackTrace);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Asynchronously retrieves the profile of a company by its ticker symbol.
+        /// </summary>
+        /// <param name="ticker">The company's ticker symbol.</param>
+        /// <returns>A Task containing the company profile data if found; otherwise, null.</returns>
+        public async Task<CompanyProfileDto> GetCompanyProfileAsync(string ticker)
+        {
+            try
+            {
+                var apikey = _configuration["FMPKey"];
+                var result = await _httpClient.GetAsync($"https://financialmodelingprep.com/api/v3/profile/{ticker}?apikey={apikey}");
+
+                if (result.IsSuccessStatusCode)
+                {
+                    var content = await result.Content.ReadAsStringAsync();
+                    var tasks = JsonConvert.DeserializeObject<FMPStock[]>(content);
+
+                    if (tasks != null && tasks.Length > 0)
+                    {
+                        return tasks[0].ToCompanyProfileDto(); // Maps API response to DTO
+                    }
+                }
+
+                Console.WriteLine($"API call failed with status code: {result.StatusCode}");
+                return null;
+            }
+            catch (Exception ex)
+            {
                 Console.WriteLine($"Error fetching company profile data: {ex.Message}");
                 Console.WriteLine(ex.StackTrace);
                 return null;
@@ -140,10 +182,10 @@ namespace api.Service
         }
 
         /// <summary>
-        /// Asynchronously retrieves stock information by search string.
+        /// Asynchronously searches for companies matching a given query string.
         /// </summary>
-        /// <param name="query">Search term inserted by user</param>
-        /// <returns>List of matching companies related to search term if found</returns>
+        /// <param name="query">The search term entered by the user.</param>
+        /// <returns>A list of matching companies as <see cref="SearchStockRequestDto"/>.</returns>
         public async Task<List<SearchStockRequestDto>> SearchCompaniesAsync(string query)
         {
             try
@@ -151,22 +193,20 @@ namespace api.Service
                 var apikey = _configuration["FMPKey"];
                 var result = await _httpClient.GetAsync($"https://financialmodelingprep.com/api/v3/search?query={query}&limit=10&exchange=NASDAQ&apikey={apikey}");
 
-                if(result.IsSuccessStatusCode)
+                if (result.IsSuccessStatusCode)
                 {
                     var content = await result.Content.ReadAsStringAsync();
-
                     var task = JsonConvert.DeserializeObject<SearchStockRequestDto[]>(content);
 
-                    if(task != null && task.Length > 0)
+                    if (task != null && task.Length > 0)
                     {
-                        return task.ToList();
+                        return task.ToList(); // Convert array to a list and return
                     }
 
                     Console.WriteLine($"No results found for {query}");
                     return new List<SearchStockRequestDto>();
                 }
 
-                // Log the status code if the API call failed
                 Console.WriteLine($"API call failed with status code: {result.StatusCode}");
                 return new List<SearchStockRequestDto>();
             }

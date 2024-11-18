@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace api.Dtos.Company
 {
-    public class CompanyKeyMetrics
+    public class CompanyKeyMetricsDto
     {
         public double revenuePerShareTTM { get; set; }
         public double netIncomePerShareTTM { get; set; }

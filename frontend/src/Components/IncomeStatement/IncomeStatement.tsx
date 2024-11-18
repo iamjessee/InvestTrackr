@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
 import Table from "../Table/Table";
 import { CompanyIncomeStatement } from "../../company";
-import { getIncomeStatement } from "../../api";
+import { getIncomeStatement } from "../../Services/CompanyIncomeStatement";
 import Spinner from "../Spinners/Spinner";
 import {
   formatLargeMonetaryNumber,
@@ -81,11 +81,13 @@ const configs = [
 const IncomeStatement = (props: Props) => {
   const ticker = useOutletContext<string>();
   const [incomeStatement, setIncomeStatement] =
-    useState<CompanyIncomeStatement[]>();
+    useState<CompanyIncomeStatement | null>(null);
   useEffect(() => {
     const getRatios = async () => {
       const result = await getIncomeStatement(ticker!);
-      setIncomeStatement(result!.data);
+      if (result && result.data) {
+        setIncomeStatement(result.data);
+      }
     };
     getRatios();
   }, [ticker]);
@@ -95,10 +97,7 @@ const IncomeStatement = (props: Props) => {
       {incomeStatement ? (
         <Table
           config={configs}
-          data={incomeStatement.map((statement, index) => ({
-            ...statement,
-            key: `${statement.date}-${index}`, // Combine date with index for uniqueness
-          }))}
+          data={[{ ...incomeStatement, key: `${incomeStatement.date}` }]} // Wrap in array for Table
         />
       ) : (
         <Spinner />

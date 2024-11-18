@@ -61,5 +61,18 @@ namespace api.Controllers
 
             return Ok(KeyMetrics);
         }
+
+        [HttpGet("incomestatement")]
+        public async Task<IActionResult> GetCompanyIncomeStatement(string query)
+        {
+            var companyIncomeStatement = await _fmpService.GetCompanyIncomeStatementAsync(query);
+
+            if(companyIncomeStatement == null)
+            {
+                return NotFound("Error retrieving company income statement data");
+            }
+
+            return Ok(companyIncomeStatement);
+        }
     }
 }
