@@ -71,6 +71,108 @@ namespace api.Service
             }
         }
 
+        public async Task<CompanyBalanceSheetDto> GetCompanyBalanceSheetAsync(string query)
+        {
+            try
+            {
+                var apikey = _configuration["FMPKey"];
+
+                var result = await _httpClient.GetAsync($"https://financialmodelingprep.com/api/v3/balance-sheet-statement/{query}?limit=20&apikey={apikey}");
+
+                if (result.IsSuccessStatusCode)
+                {
+                    var content = await result.Content.ReadAsStringAsync();
+
+                    var tasks = JsonConvert.DeserializeObject<CompanyBalanceSheetDto[]>(content);
+
+                    if (tasks != null && tasks.Length > 0)
+                    {
+                        return tasks[0];
+                    }
+
+                    Console.WriteLine($"No balance sheet found for symbol: {query}");
+                    return null;
+                }
+
+                return null;
+            }
+             catch (Exception ex)
+            {
+                Console.WriteLine($"Error fetching company balance sheet data: {ex.Message}");
+                Console.WriteLine(ex.StackTrace);
+                return null;
+            }
+        }
+
+        public async Task<CompanyCashFlowDto> GetCompanyCashFlowAsync(string query)
+        {
+             try
+            {
+                var apikey = _configuration["FMPKey"];
+
+                var result = await _httpClient.GetAsync($"https://financialmodelingprep.com/api/v3/cash-flow-statement/{query}?limit=100&apikey={apikey}");
+
+                if (result.IsSuccessStatusCode)
+                {
+                    var content = await result.Content.ReadAsStringAsync();
+
+                    var tasks = JsonConvert.DeserializeObject<CompanyCashFlowDto[]>(content);
+
+                    if (tasks != null && tasks.Length > 0)
+                    {
+                        return tasks[0];
+                    }
+
+                    Console.WriteLine($"No cashflow statemnet found for symbol: {query}");
+                    return null;
+                }
+
+                return null;
+            }
+             catch (Exception ex)
+            {
+                Console.WriteLine($"Error fetching cashflow statemnet data: {ex.Message}");
+                Console.WriteLine(ex.StackTrace);
+                return null;
+            }
+        }
+
+        public async Task<CompanyHistoricalDividendDto> GetCompanyHistoricalDividendAsync(string query)
+        {
+             try
+            {
+                var apikey = _configuration["FMPKey"];
+
+                var result = await _httpClient.GetAsync($"https://financialmodelingprep.com/api/v3/historical-price-full/stock_dividend/{query}?apikey={apikey}");
+
+                if(result.IsSuccessStatusCode)
+                {
+                    var content = await result.Content.ReadAsStringAsync();
+
+                    Console.WriteLine(content);
+
+                    var tasks = JsonConvert.DeserializeObject<CompanyHistoricalDividendDto>(content);
+
+                    if(tasks != null)
+                    {
+                        return tasks;
+                    }
+
+                    Console.WriteLine($"No historical dividend found for {query}: {result.StatusCode}");
+                    return null;
+                }
+
+                Console.WriteLine($"API call failed with status code: {result.StatusCode}");
+                return null;
+            }
+             catch (Exception ex)
+            {
+                Console.WriteLine($"Error fetching {query} Historical Dividend: {ex.Message}");
+                Console.WriteLine(ex.StackTrace);
+                return null;
+            }
+        }
+
         /// <summary>
         /// Asynchronously retrieves a company's income statement data.
         /// Currently not implemented.
@@ -105,7 +207,6 @@ namespace api.Service
             }
              catch (Exception ex)
             {
-                // Log any exceptions that occur during the API call
                 Console.WriteLine($"Error fetching {query} Inncome Statement: {ex.Message}");
                 Console.WriteLine(ex.StackTrace);
                 return null;
@@ -157,6 +258,7 @@ namespace api.Service
             try
             {
                 var apikey = _configuration["FMPKey"];
+
                 var result = await _httpClient.GetAsync($"https://financialmodelingprep.com/api/v3/profile/{ticker}?apikey={apikey}");
 
                 if (result.IsSuccessStatusCode)
@@ -176,6 +278,37 @@ namespace api.Service
             catch (Exception ex)
             {
                 Console.WriteLine($"Error fetching company profile data: {ex.Message}");
+                Console.WriteLine(ex.StackTrace);
+                return null;
+            }
+        }
+
+        public async Task<CompanyTenKDto> GetCompanyTenKAsync(string query)
+        {
+             try
+            {
+                var apikey = _configuration["FMPKey"];
+
+                var result = await _httpClient.GetAsync($"https://financialmodelingprep.com/api/v3/sec_filings/{query}?type=10-K&page=0&apikey={apikey}");
+
+                if (result.IsSuccessStatusCode)
+                {
+                    var content = await result.Content.ReadAsStringAsync();
+
+                    var tasks = JsonConvert.DeserializeObject<CompanyTenKDto[]>(content);
+
+                    if (tasks != null && tasks.Length > 0)
+                    {
+                        return tasks[0];
+                    }
+                }
+
+                Console.WriteLine($"API call failed with status code: {result.StatusCode}");
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error fetching company TenK data: {ex.Message}");
                 Console.WriteLine(ex.StackTrace);
                 return null;
             }

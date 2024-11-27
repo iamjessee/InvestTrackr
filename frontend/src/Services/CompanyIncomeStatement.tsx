@@ -9,6 +9,7 @@ export const getIncomeStatement = async (query: string) => {
     const data = await axios.get<CompanyIncomeStatement>(
       api + `?query=${query}`
     );
+    console.log(data); // debug
     return data;
   } catch (error) {
     handleError(error);

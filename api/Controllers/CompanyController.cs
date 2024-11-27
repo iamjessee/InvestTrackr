@@ -74,5 +74,57 @@ namespace api.Controllers
 
             return Ok(companyIncomeStatement);
         }
+
+        [HttpGet("balancesheet")]
+        public async Task<IActionResult> GetCompanyBalanceSheet(string query)
+        {
+            var companyBalanceSheet = await _fmpService.GetCompanyBalanceSheetAsync(query);
+
+            if(companyBalanceSheet == null)
+            {
+                return NotFound("Error retrieving company balance sheet data");
+            }
+
+            return Ok(companyBalanceSheet);
+        }
+
+        [HttpGet("cashflow")]
+        public async Task<IActionResult> GetCompanyCashFlow(string query)
+        {
+            var companyCashFlow = await _fmpService.GetCompanyBalanceSheetAsync(query);
+
+            if(companyCashFlow == null)
+            {
+                return NotFound("Error retrieving company cash flow data");
+            }
+
+            return Ok(companyCashFlow);
+        }
+
+        [HttpGet("tenk")]
+        public async Task<IActionResult> GetCompanyTenK(string query)
+        {
+            var companyTenK = await _fmpService.GetCompanyTenKAsync(query);
+
+            if(companyTenK == null)
+            {
+                return NotFound("Error retrieving company tenk data");
+            }
+
+            return Ok(companyTenK);
+        }
+
+        [HttpGet("historicaldividend")]
+        public async Task<IActionResult> GetCompanyHistoricalDividend(string query)
+        {
+            var historicalDividend = await _fmpService.GetCompanyHistoricalDividendAsync(query);
+
+            if(historicalDividend == null)
+            {
+                return NotFound("Error retrieving company historical Dividend");
+            }
+
+            return Ok(historicalDividend);
+        }
     }
 }

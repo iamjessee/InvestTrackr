@@ -12,7 +12,7 @@ import { date } from "yup";
 
 type Props = {};
 
-const configs = [
+const config = [
   {
     label: "Date",
     render: (company: CompanyIncomeStatement) => company.date,
@@ -96,7 +96,7 @@ const IncomeStatement = (props: Props) => {
     <>
       {incomeStatement ? (
         <Table
-          config={configs}
+          config={config}
           data={[{ ...incomeStatement, key: `${incomeStatement.date}` }]} // Wrap in array for Table
         />
       ) : (

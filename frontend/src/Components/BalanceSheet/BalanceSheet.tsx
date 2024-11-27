@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { CompanyBalanceSheet } from "../../company";
 import { useOutletContext } from "react-router-dom";
 import RatioList from "../RatioList/RatioList";
-import { getBalanceSheet } from "../../api";
+import { getBalanceSheet } from "../../Services/CompanyBalanceSheet";
 import Table from "../Table/Table";
 import Spinner from "../Spinners/Spinner";
 import {
@@ -86,7 +86,7 @@ const BalanceSheet = (props: Props) => {
   useEffect(() => {
     const getCompanyData = async () => {
       const value = await getBalanceSheet(ticker!);
-      setCompanyData(value?.data[0]);
+      setCompanyData(value?.[0]);
     };
     getCompanyData();
   }, [ticker]);
@@ -94,7 +94,7 @@ const BalanceSheet = (props: Props) => {
   return (
     <>
       {companyData ? (
-        <RatioList
+        <Table
           config={config}
           data={{
             ...companyData,
