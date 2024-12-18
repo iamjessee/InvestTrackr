@@ -77,13 +77,15 @@ namespace api.Service
             {
                 var apikey = _configuration["FMPKey"];
 
-                var result = await _httpClient.GetAsync($"https://financialmodelingprep.com/api/v3/balance-sheet-statement/{query}?limit=20&apikey={apikey}");
+                var result = await _httpClient.GetAsync($"https://financialmodelingprep.com/api/v3/balance-sheet-statement/{query}?period=annual&apikey={apikey}");
 
                 if (result.IsSuccessStatusCode)
                 {
                     var content = await result.Content.ReadAsStringAsync();
 
                     var tasks = JsonConvert.DeserializeObject<CompanyBalanceSheetDto[]>(content);
+
+                    Console.WriteLine($"Tasks: {tasks}");
 
                     if (tasks != null && tasks.Length > 0)
                     {
@@ -110,7 +112,7 @@ namespace api.Service
             {
                 var apikey = _configuration["FMPKey"];
 
-                var result = await _httpClient.GetAsync($"https://financialmodelingprep.com/api/v3/cash-flow-statement/{query}?limit=100&apikey={apikey}");
+                var result = await _httpClient.GetAsync($"https://financialmodelingprep.com/api/v3/cash-flow-statement/{query}?period=annual&apikey={apikey}");
 
                 if (result.IsSuccessStatusCode)
                 {
@@ -148,8 +150,6 @@ namespace api.Service
                 if(result.IsSuccessStatusCode)
                 {
                     var content = await result.Content.ReadAsStringAsync();
-
-                    Console.WriteLine(content);
 
                     var tasks = JsonConvert.DeserializeObject<CompanyHistoricalDividendDto>(content);
 

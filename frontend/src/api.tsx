@@ -24,18 +24,6 @@ import {
 //   }
 // };
 
-// export const getCashFlow = async (query: string) => {
-//   try {
-//     const data = await axios.get<CompanyCashFlow[]>(
-//       `https://financialmodelingprep.com/api/v3/cash-flow-statement/${query}?limit=100&apikey=${process.env.REACT_APP_API_KEY}`
-//     );
-//     return data;
-//   } catch (error: any) {
-//     console.log("error message: ", error.message);
-//     return null;
-//   }
-// };
-
 export const getTenK = async (query: string) => {
   try {
     const data = await axios.get<CompanyTenK[]>(

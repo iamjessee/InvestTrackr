@@ -6,6 +6,7 @@ type Props = {
 const Table = ({ config, data }: Props) => {
   const renderedRows = data.map((rowData: any, index: number) => {
     // Use index as fallback if no unique identifier is available
+    console.log(data); // debug
     return (
       <tr key={index}>
         {config.map((val: any, colIndex: number) => {

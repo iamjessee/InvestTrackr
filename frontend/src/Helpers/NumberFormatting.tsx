@@ -1,4 +1,5 @@
 export const formatLargeMonetaryNumber: any = (number: number) => {
+  console.log(number); // debug
   if (number < 0) {
     return "-" + formatLargeMonetaryNumber(-1 * number);
   }

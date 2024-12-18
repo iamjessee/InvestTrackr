@@ -6,10 +6,9 @@ const api = "http://localhost:5261/api/company/balancesheet";
 
 export const getBalanceSheet = async (query: string) => {
   try {
-    const response = await axios.get<CompanyBalanceSheet[]>(
-      api + `?query=${query}`
-    );
-    return response.data;
+    const data = await axios.get<CompanyBalanceSheet>(api + `?query=${query}`);
+    console.log(data); // debug
+    return data;
   } catch (error) {
     handleError(error);
   }

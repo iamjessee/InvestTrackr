@@ -82,11 +82,16 @@ const config = [
 
 const BalanceSheet = (props: Props) => {
   const ticker = useOutletContext<string>();
-  const [companyData, setCompanyData] = useState<CompanyBalanceSheet>();
+  const [companyData, setCompanyData] = useState<CompanyBalanceSheet | null>(
+    null
+  );
+  console.log(companyData); // debug
   useEffect(() => {
     const getCompanyData = async () => {
       const value = await getBalanceSheet(ticker!);
-      setCompanyData(value?.[0]);
+      if (value && value.data) {
+        setCompanyData(value.data);
+      }
     };
     getCompanyData();
   }, [ticker]);
@@ -96,10 +101,7 @@ const BalanceSheet = (props: Props) => {
       {companyData ? (
         <Table
           config={config}
-          data={{
-            ...companyData,
-            key: `${companyData.date}-${companyData.cik}`,
-          }}
+          data={[{ ...companyData, key: `${companyData.cik}` }]}
         />
       ) : (
         <Spinner />

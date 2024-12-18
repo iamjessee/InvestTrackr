@@ -91,7 +91,7 @@ namespace api.Controllers
         [HttpGet("cashflow")]
         public async Task<IActionResult> GetCompanyCashFlow(string query)
         {
-            var companyCashFlow = await _fmpService.GetCompanyBalanceSheetAsync(query);
+            var companyCashFlow = await _fmpService.GetCompanyCashFlowAsync(query);
 
             if(companyCashFlow == null)
             {

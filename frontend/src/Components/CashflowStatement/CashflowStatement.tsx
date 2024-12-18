@@ -16,7 +16,7 @@ const config = [
   {
     label: "Operating Cashflow",
     render: (company: CompanyCashFlow) =>
-      formatLargeMonetaryNumber(company.operatingCashFlow),
+      formatLargeMonetaryNumber(Number(company.operatingCashFlow)),
   },
   {
     label: "Investing Cashflow",
@@ -57,6 +57,7 @@ const CashflowStatement = (props: Props) => {
   const [cashFlowData, setCashFlowData] = useState<CompanyCashFlow | null>(
     null
   );
+  console.log(cashFlowData); // debug
   useEffect(() => {
     const getRatios = async () => {
       const result = await getCashFlow(ticker!);
