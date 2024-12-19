@@ -85,8 +85,6 @@ namespace api.Service
 
                     var tasks = JsonConvert.DeserializeObject<CompanyBalanceSheetDto[]>(content);
 
-                    Console.WriteLine($"Tasks: {tasks}");
-
                     if (tasks != null && tasks.Length > 0)
                     {
                         return tasks[0];

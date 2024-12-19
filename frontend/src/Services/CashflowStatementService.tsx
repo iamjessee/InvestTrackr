@@ -7,7 +7,6 @@ const api = "http://localhost:5261/api/company/cashflow";
 export const getCashFlow = async (query: string) => {
   try {
     const data = await axios.get<CompanyCashFlow>(api + `?query=${query}`);
-    console.log(data); // debug
     return data;
   } catch (error) {
     handleError(error);

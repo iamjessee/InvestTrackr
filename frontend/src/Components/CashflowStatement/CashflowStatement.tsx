@@ -57,7 +57,6 @@ const CashflowStatement = (props: Props) => {
   const [cashFlowData, setCashFlowData] = useState<CompanyCashFlow | null>(
     null
   );
-  console.log(cashFlowData); // debug
   useEffect(() => {
     const getRatios = async () => {
       const result = await getCashFlow(ticker!);
