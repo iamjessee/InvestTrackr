@@ -18,7 +18,7 @@ namespace api.Interfaces
         Task<CompanyIncomeStatementDto> GetCompanyIncomeStatementAsync(string query);
         Task<CompanyBalanceSheetDto> GetCompanyBalanceSheetAsync(string query);
         Task<CompanyCashFlowDto> GetCompanyCashFlowAsync(string query);
-        Task<CompanyTenKDto> GetCompanyTenKAsync(string query);
+        Task<CompanyTenKDto[]> GetCompanyTenKAsync(string query);
         Task<CompanyHistoricalDividendDto> GetCompanyHistoricalDividendAsync(string query);
     }
 }

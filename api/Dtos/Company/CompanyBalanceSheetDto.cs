@@ -27,14 +27,14 @@ namespace api.Dtos.Company
         public long IntangibleAssets { get; set; }
         public long GoodwillAndIntangibleAssets { get; set; }
         public long LongTermInvestments { get; set; }
-        public int TaxAssets { get; set; }
+        public long TaxAssets { get; set; }
         public long OtherNonCurrentAssets { get; set; }
         public long TotalNonCurrentAssets { get; set; }
         public int OtherAssets { get; set; }
         public long TotalAssets { get; set; }
         public long AccountPayables { get; set; }
         public long ShortTermDebt { get; set; }
-        public int TaxPayables { get; set; }
+        public long TaxPayables { get; set; }
         public long DeferredRevenue { get; set; }
         public long OtherCurrentLiabilities { get; set; }
         public long TotalCurrentLiabilities { get; set; }
@@ -44,12 +44,12 @@ namespace api.Dtos.Company
         public long OtherNonCurrentLiabilities { get; set; }
         public long TotalNonCurrentLiabilities { get; set; }
         public int OtherLiabilities { get; set; }
-        public int CapitalLeaseObligations { get; set; }
+        public long CapitalLeaseObligations { get; set; }
         public long TotalLiabilities { get; set; }
         public int PreferredStock { get; set; }
         public long CommonStock { get; set; }
         public long RetainedEarnings { get; set; }
-        public int AccumulatedOtherComprehensiveIncomeLoss { get; set; }
+        public long AccumulatedOtherComprehensiveIncomeLoss { get; set; }
         public long OthertotalStockholdersEquity { get; set; }
         public long TotalStockholdersEquity { get; set; }
         public long TotalEquity { get; set; }

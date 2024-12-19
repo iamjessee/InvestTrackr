@@ -17,25 +17,25 @@ namespace api.Dtos.Company
         public string period { get; set; }
         public long netIncome { get; set; }
         public long depreciationAndAmortization { get; set; }
-        public int deferredIncomeTax { get; set; }
+        public long deferredIncomeTax { get; set; }
         public long stockBasedCompensation { get; set; }
         public long changeInWorkingCapital { get; set; }
-        public int accountsReceivables { get; set; }
-        public int inventory { get; set; }
+        public long accountsReceivables { get; set; }
+        public long inventory { get; set; }
         public long accountsPayables { get; set; }
-        public int otherWorkingCapital { get; set; }
-        public int otherNonCashItems { get; set; }
+        public long otherWorkingCapital { get; set; }
+        public long otherNonCashItems { get; set; }
         public long netCashProvidedByOperatingActivities { get; set; }
-        public int investmentsInPropertyPlantAndEquipment { get; set; }
+        public long investmentsInPropertyPlantAndEquipment { get; set; }
         public int acquisitionsNet { get; set; }
         public long purchasesOfInvestments { get; set; }
         public long salesMaturitiesOfInvestments { get; set; }
         public int otherInvestingActivites { get; set; }
-        public int netCashUsedForInvestingActivites { get; set; }
-        public int debtRepayment { get; set; }
+        public long netCashUsedForInvestingActivites { get; set; }
+        public long debtRepayment { get; set; }
         public int commonStockIssued { get; set; }
         public long commonStockRepurchased { get; set; }
-        public int dividendsPaid { get; set; }
+        public long dividendsPaid { get; set; }
         public long otherFinancingActivites { get; set; }
         public long netCashUsedProvidedByFinancingActivities { get; set; }
         public int effectOfForexChangesOnCash { get; set; }
@@ -43,7 +43,7 @@ namespace api.Dtos.Company
         public long cashAtEndOfPeriod { get; set; }
         public long cashAtBeginningOfPeriod { get; set; }
         public long operatingCashFlow { get; set; }
-        public int capitalExpenditure { get; set; }
+        public long capitalExpenditure { get; set; }
         public long freeCashFlow { get; set; }
         public string link { get; set; }
         public string finalLink { get; set; }

@@ -281,7 +281,7 @@ namespace api.Service
             }
         }
 
-        public async Task<CompanyTenKDto> GetCompanyTenKAsync(string query)
+        public async Task<CompanyTenKDto[]> GetCompanyTenKAsync(string query)
         {
              try
             {
@@ -293,11 +293,13 @@ namespace api.Service
                 {
                     var content = await result.Content.ReadAsStringAsync();
 
+                    Console.WriteLine($"contents: {content}");
+
                     var tasks = JsonConvert.DeserializeObject<CompanyTenKDto[]>(content);
 
                     if (tasks != null && tasks.Length > 0)
                     {
-                        return tasks[0];
+                        return tasks;
                     }
                 }
 
