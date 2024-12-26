@@ -46,9 +46,5 @@ InvestTrackr is a stock tracking and portfolio management tool that fetches real
 - Implementing user authentication using JWT
 - Using TypeScript in React to build the front end
 
-## Future Improvements / To-Do
 
-- 🔧 Need to finish migrating API calls from front end to backend
-- ⚙️ Fix some bugs with front end
-
-![InvestTrackr Demo](https://raw.githubusercontent.com/iamjessee/InvestTrackr/master/INVESTTRACKRdemo.gif)
+![InvestTrackr Demo](https://github.com/iamjessee/InvestTrackr/raw/master/Demo.gif)
